@@ -1,0 +1,18 @@
+{
+  "name": "flang",
+  "version": "0.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "bin": {
+    "flang": "bin/flang.js"
+  },
+  "files": ["bin", "index.js", "register.js", "README.md"],
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Fábio Santos <fabiosantosart@gmail.com>",
+  "license": "MIT"
+}
