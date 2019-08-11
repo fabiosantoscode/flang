@@ -6,13 +6,45 @@
   "bin": {
     "flang": "bin/flang.js"
   },
-  "files": ["bin", "index.js", "register.js", "README.md"],
+  "files": [
+    "bin",
+    "lib",
+    "register.js",
+    "LICENSE",
+    "README.md"
+  ],
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "eslint --fix 'lib/**/*.js'"
   },
   "author": "Fábio Santos <fabiosantosart@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "eslint": "^6.1.0",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "husky": "^3.0.3"
+  },
+  "eslintConfig": {
+    "extends": "standard",
+    "globals": {
+      "describe": false,
+      "it": false
+    },
+    "rules": {
+      "no-eval": "off"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint --silent && npm run test --silent"
+    }
+  }
 }
