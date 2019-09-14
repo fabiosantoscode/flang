@@ -71,7 +71,19 @@ describe('parser', () => {
     assert.deepEqual(core.parse('((a (b c)) d)'), ['do', [['a', ['b', 'c']], 'd']])
   })
   it('can parse lambdas', () => {
-    assert.deepEqual(core.parse('(fn (x) x)'), ['do', ['fn', ['x'], 'x']])
+    assert.deepEqual(core.parse('(fn [x] x)'), ['do', ['fn', ['/list', 'x'], 'x']])
+  })
+  it('parses short lambdas', () => {
+    assert.deepEqual(
+      core.parse('#(4)'),
+      ['do', ['fn', ['/list'], 4]]
+    )
+  })
+  it('parses short lambdas with arguments', () => {
+    assert.deepEqual(
+      core.parse('#[x](x)'),
+      ['do', ['fn', ['/list', 'x'], 'x']]
+    )
   })
   it('can parse lists', () => {
     assert.deepEqual(core.parse('[42]'), ['do', ['/list', 42]])
