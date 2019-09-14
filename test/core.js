@@ -27,6 +27,39 @@ describe('parser', () => {
   })
   it('can parse strings', () => {
     assert.deepEqual(core.parse('"sup"'), ['do', ['/str', 'sup']])
+    assert.deepEqual(core.parse("'sup'"), ['do', ['/str', 'sup']])
+  })
+  it('can parse multiline strings', () => {
+    assert.deepEqual(
+      core.parse(`
+      "
+        sup
+          suppers
+      "`),
+      ['do', ['/str', 'sup\n  suppers']])
+    assert.deepEqual(
+      core.parse(`
+        "
+        sup"
+      `),
+      ['do', ['/str', 'sup']]
+    )
+    assert.deepEqual(
+      core.parse(`
+        "
+  sup
+        "
+      `),
+      ['do', ['/str', 'sup']]
+    )
+    assert.deepEqual(
+      core.parse(`
+        "
+            sup
+        "
+      `),
+      ['do', ['/str', 'sup']]
+    )
   })
   it('can parse numbers', () => {
     assert.deepEqual(core.parse('42'), ['do', 42])
