@@ -1,0 +1,7 @@
+(def assert (require "assert"))
+
+(describe "native tests" (fn []
+  (it "omg yeh" (fn []
+    (assert (< 1 2 3))))
+))
+

@@ -14,7 +14,7 @@
     "README.md"
   ],
   "scripts": {
-    "test": "mocha",
+    "test": "mocha -r ./register.js test/*.js test/*.fl",
     "lint": "eslint --fix 'lib/**/*.js'"
   },
   "author": "Fábio Santos <fabiosantosart@gmail.com>",
@@ -27,6 +27,7 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
+    "flang": "0.0.1",
     "husky": "^3.0.3",
     "mocha": "^6.2.0"
   },
@@ -44,5 +45,8 @@
     "hooks": {
       "pre-commit": "npm run lint --silent && npm run test --silent"
     }
+  },
+  "dependencies": {
+    "pirates": "^4.0.1"
   }
 }
