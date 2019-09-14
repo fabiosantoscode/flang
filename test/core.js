@@ -7,7 +7,13 @@ const core = require('../lib/core.js')
 describe('tokenizer', () => {
   it('can tokenize', () => {
     assert.deepEqual(core.tokenize('(a b)'), ['(', 'a', 'b', ')'])
+    assert.deepEqual(core.tokenize('foo.bar'), ['foo.bar'])
     assert.deepEqual(core.tokenize('< > >= +'), ['<', '>', '>=', '+'])
+    assert.deepEqual(core.tokenize('#'), ['#'])
+    assert.deepEqual(core.tokenize('[1 2 3]'), ['[', 1, 2, 3, ']'])
+  })
+  it('does not tokenize internal call tokens', () => {
+    assert.throws(() => core.tokenize('(/str)'))
   })
 })
 
@@ -32,22 +38,37 @@ describe('parser', () => {
   it('can parse recursive expressions', () => {
     assert.deepEqual(core.parse('((a (b c)) d)'), ['do', [['a', ['b', 'c']], 'd']])
   })
+  it('can parse lambdas', () => {
+    assert.deepEqual(core.parse('(fn (x) x)'), ['do', ['fn', ['x'], 'x']])
+  })
+  it('can parse lists', () => {
+    assert.deepEqual(core.parse('[42]'), ['do', ['/list', 42]])
+  })
 })
 
 describe('interpreter', () => {
   it('can evaluate', () => {
-    assert.deepEqual(core.parseEvaluate('1 2 3 42'), 42)
+    assert.equal(core.parseEvaluate('1 2 3 42'), 42)
   })
   it('evaluates cmpops', () => {
-    assert.deepEqual(core.parseEvaluate('(< 1 2)'), true)
-    assert.deepEqual(core.parseEvaluate('(<= 1 2 3)'), true)
+    assert.equal(core.parseEvaluate('(< 1 2)'), true)
+    assert.equal(core.parseEvaluate('(<= 1 2 3)'), true)
   })
   it('evaluates binOps', () => {
-    assert.deepEqual(core.parseEvaluate('(- 1 2)'), -1)
-    assert.deepEqual(core.parseEvaluate('(+ 1 2 3)'), 6)
+    assert.equal(core.parseEvaluate('(- 1 2)'), -1)
+    assert.equal(core.parseEvaluate('(+ 1 2 3)'), 6)
   })
   it('evaluates if', () => {
-    assert.deepEqual(core.parseEvaluate('(if 1 1 0)'), 1)
-    assert.deepEqual(core.parseEvaluate('(if 0 1 0)'), 0)
+    assert.equal(core.parseEvaluate('(if 1 1 0)'), 1)
+    assert.equal(core.parseEvaluate('(if 0 1 0)'), 0)
+  })
+  it('evaluates strings', () => {
+    assert.equal(core.parseEvaluate('"sup"'), 'sup')
+  })
+  it('evaluates lambdas', () => {
+    assert.equal(core.parseEvaluate('((fn [] 10))'), 10)
+  })
+  it('evaluates lambdas with arguments', () => {
+    assert.equal(core.parseEvaluate('((fn [x] x) 42)'), 42)
   })
 })
