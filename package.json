@@ -29,7 +29,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "flang": "0.0.2",
     "husky": "^3.0.3",
-    "mocha": "^6.2.0"
+    "mocha": "^10.2.0"
   },
   "eslintConfig": {
     "extends": "standard",
